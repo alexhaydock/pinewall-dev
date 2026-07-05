@@ -27,6 +27,7 @@ jobs:
 
       - name: Install deps
         run: |
+          set -xeuo pipefail
           sudo apt-get update
           sudo apt-get install -y cpio just mtools systemd-ukify zstd
 
