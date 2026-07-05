@@ -1,0 +1,47 @@
+---
+include: pinewall-services.yaml  # we can only use one include so take note this is a chain of includes
+contents:
+  packages:
+    # This one metapackage provides busybox, apk, musl-utils, and OpenRC among others
+    - alpine-base
+    # Kernel and null firmware package
+    - linux-firmware-none
+    - linux-lts  # I'd like to use linux-virt for minimalism, but it doesn't ship PPPoE kernel modules :(
+    # Pinewall main workload packages
+    - bird
+    - bird-openrc
+    - ca-certificates
+    - chrony
+    - chrony-openrc
+    - conntrack-tools
+    - corerad
+    - corerad-openrc
+    - dbus
+    - dns-root-hints
+    - dropbear
+    - dropbear-openrc
+    - ethtool
+    - htop
+    - ifupdown-ng-ppp
+    - ifupdown-ng-wireguard
+    - iperf3
+    - kea
+    - logrotate
+    - nano
+    - nftables
+    - nftables-openrc
+    - nload
+    - openssl
+    - ppp-pppoe
+    - prometheus-node-exporter
+    - prometheus-node-exporter-openrc
+    - rng-tools
+    - rng-tools-openrc
+    - tcpdump
+    - tzdata
+    - ulogd
+    - ulogd-openrc
+    - unbound
+    - unbound-openrc
+    - util-linux
+    - wireguard-tools-wg

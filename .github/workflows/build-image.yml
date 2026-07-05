@@ -1,0 +1,52 @@
+---
+name: build-pinewall-iamge
+
+on:
+  # Allow manual triggers
+  workflow_dispatch:
+  # Run on pushes
+  push:
+
+jobs:
+  build_image:
+    name: Build Pinewall image
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v7
+
+      - name: Fetch my custom patched apko with lockfile support
+        run: |
+          curl -sL https://github.com/alexhaydock/apko/releases/download/b87f3ba-with-lockfile/apko -o apko
+          sudo mv -v apko /usr/local/bin/apko
+          sudo chmod +x /usr/local/bin/apko
+
+      - name: Install deps
+        run: |
+          apt-get update
+          apt-get install -y \
+            cpio \
+            just \
+            mtools \
+            systemd-ukify \
+            zstd
+
+      - name: Build Pinewall image
+        run: |
+          just image
+
+      - name: Identify generated file
+        run: |
+          echo "ASSET="\"${IMAGENAME}_$(sha256sum ../apko.lock | cut -c1-7).efi.img\"" >> "$GITHUB_ENV"
+          echo "TAG="\"${IMAGENAME}_$(sha256sum ../apko.lock | cut -c1-7).efi.img\"" >> "$GITHUB_ENV"
+
+      - name: Push image as a GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ env.TAG }}
+          name: ${{ env.TAG }}
+          files: ${{ env.ASSET }}
