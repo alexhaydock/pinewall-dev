@@ -27,8 +27,8 @@ jobs:
 
       - name: Install deps
         run: |
-          apt-get update
-          #apt-get install -y cpio just mtools systemd-ukify zstd
+          sudo apt-get update
+          sudo apt-get install -y cpio just mtools systemd-ukify zstd
 
       - name: Build Pinewall image
         run: |
